@@ -109,9 +109,6 @@ namespace EmbedIO
             set
             {
                 EnsureConfigurationNotLocked();
-                if (value && SwanRuntime.OS != Swan.OperatingSystem.Windows)
-                    throw new PlatformNotSupportedException("AutoLoadCertificate functionality is only available under Windows.");
-
                 _autoLoadCertificate = value;
             }
         }
@@ -130,9 +127,6 @@ namespace EmbedIO
             set
             {
                 EnsureConfigurationNotLocked();
-                if (value && SwanRuntime.OS != Swan.OperatingSystem.Windows)
-                    throw new PlatformNotSupportedException("AutoRegisterCertificate functionality is only available under Windows.");
-
                 _autoRegisterCertificate = value;
             }
         }
@@ -193,9 +187,6 @@ namespace EmbedIO
 
         private X509Certificate2? LoadCertificate()
         {
-            if (SwanRuntime.OS != Swan.OperatingSystem.Windows)
-                return null;
-
             if (!string.IsNullOrWhiteSpace(_certificateThumbprint)) return GetCertificate(_certificateThumbprint);
 
             using var netsh = GetNetsh("show");
@@ -261,9 +252,6 @@ namespace EmbedIO
 
         private bool TryRegisterCertificate()
         {
-            if (SwanRuntime.OS != Swan.OperatingSystem.Windows)
-                return false;
-
             if (_certificate == null)
                 throw new InvalidOperationException("A certificate is required to AutoRegister");
 
